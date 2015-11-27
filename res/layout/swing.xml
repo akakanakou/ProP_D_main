@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/gswing"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="181dp"
+            android:layout_height="158dp"
+            android:id="@+id/imageView10"
+            android:src="@mipmap/muki" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="打ちたい方向にスマホの画面を向け図のように振ってください"
+            android:id="@+id/textView7"
+            android:layout_gravity="center_vertical"
+            android:textColor="#ffff00" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="288dp"></LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="288dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_swing"
+            android:id="@+id/btn_swing"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onClickSwingBtn" />
+    </LinearLayout>
+
+</LinearLayout>
