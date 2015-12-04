@@ -191,7 +191,7 @@ public class MapsActivity extends FragmentActivity  {
                         /* ここから */
                         //SQL文がうまく機能しているか確認
                         //玉を移動させてアプリを起動しなおすと、初期位置に戻っていたため
-                        String sqlstl = "update ball set latitude = " + ball_mLatitude + ",longitude = " + ball_mLongitude
+                        String sqlstl = "update ball set latitude = " + new_position.latitude + ",longitude = " + new_position.longitude
                                 + " where latitude =" + old_position.latitude + ";";
                         db.execSQL(sqlstl);
                         /* ここまで追加 */
