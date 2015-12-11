@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:weightSum="1"
+    android:background="@mipmap/back">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="328dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.19">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="バズーカ残り"
+            android:id="@+id/textView"
+            android:textIsSelectable="true"
+            android:textSize="23dp"
+            android:layout_weight="0.04"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remaining"
+            android:id="@+id/textView2"
+            android:textSize="23dp"
+            android:layout_weight="0.04"
+            android:layout_gravity="right"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="発"
+            android:id="@+id/textView3"
+            android:textSize="23dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="328dp"
+        android:layout_height="350dp"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/life" />
+
+        <ImageView
+            android:layout_width="230dp"
+            android:layout_height="338dp"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/castle_red" />
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="167dp"
+        android:layout_height="82dp"
+        android:id="@+id/imageButton"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/shot" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="266dp"
+        android:layout_height="wrap_content"></LinearLayout>
+
+
+
+
+</LinearLayout>

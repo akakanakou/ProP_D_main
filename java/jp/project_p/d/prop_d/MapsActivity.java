@@ -1,11 +1,11 @@
 package jp.project_p.d.prop_d;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.internal.view.SupportActionModeWrapper;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,6 +23,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -33,19 +37,25 @@ public class MapsActivity extends FragmentActivity  {
 
     private double university_mLatitude = 35.62519765707683;
     private double university_mLongitude = 139.34302747249603;
-    private double ball_mLatitude = 35.6246621929409;
-    private double ball_mLongitude = 139.34279680252075;
+    private double ball_mLatitude = 35.576884237339776;
+    private double ball_mLongitude = 139.37457293272018;
     private double castle_mLatitude = 35.625917997814696;
     private double castle_mLongitude = 139.3448030948639;
+    private double hall_mLatitude = 43.39546905320556;
+    private double hall_mLongitude = 142.822265625;
+    public LatLng hall_location = new LatLng(hall_mLatitude, hall_mLongitude);
     private GoogleMap mMap = null; // Might be null if Google Play services APK is not available.
     public Marker ball = null;
-    public LatLng old_position; //変更前の緯度経度を保持
+    public Marker hall = null;
+    //public LatLng old_position; //変更前の緯度経度を保持
+    private HashMap<Marker,CastleMarker> hall_status;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps_activity);
+        hall_status = new HashMap<Marker,CastleMarker>();
         setUpMapIfNeeded();
     }
 
@@ -53,6 +63,7 @@ public class MapsActivity extends FragmentActivity  {
     protected void onResume() {
         super.onResume();
         //setUpMapIfNeeded();
+
     }
 
     /**
@@ -103,7 +114,6 @@ public class MapsActivity extends FragmentActivity  {
                 .target(university_location).zoom(12.0f)
                 .bearing(0).build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPos));
-        Random r = new Random();
         MarkerOptions options = new MarkerOptions();
         //String[] columns = new String[]{"latitude","longitude"};
                 /*Cursor cursor = db.query("ball", columns, null,
@@ -111,17 +121,33 @@ public class MapsActivity extends FragmentActivity  {
         String sqlstr = "select latitude, longitude from ball";
         Cursor cursor = db.rawQuery(sqlstr, null);
         while(cursor.moveToNext()) {
+            //options = new MarkerOptions();
             options.position(new LatLng((cursor.getDouble(cursor.getColumnIndex("latitude"))), (cursor.getDouble(cursor.getColumnIndex("longitude")))));
             options.title("ボール");
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ball));
             options.anchor(0.5f, 0.5f);
             mMap.addMarker(options);
         }
+
+        options.position(hall_location);
+        options.title("城");
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.hall));
+        options.anchor(0.5f, 0.5f);
+        hall = mMap.addMarker(options);
+        CastleMarker cas = new CastleMarker();
+
         options.position(castle_location);
         options.title("城");
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.castle));
         options.anchor(0.5f, 0.5f);
-        mMap.addMarker(options);
+        hall = mMap.addMarker(options);
+
+        
+
+        //CastleMarker cas = new CastleMarker();
+
+
+
 
         options.position(ball_location);
         options.title("ボール");
@@ -129,20 +155,31 @@ public class MapsActivity extends FragmentActivity  {
         options.anchor(0.5f, 0.5f);
         mMap.addMarker(options);
 
+
+                //options = new MarkerOptions();
+        /*options.position(ball_location);
+        options.title("ボール");
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ball));
+        options.anchor(0.5f, 0.5f);
+        mMap.addMarker(options);*/
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 // TODO Auto-generated method stub
                 String id = marker.getId();
-                old_position = marker.getPosition(); //変更前の緯度経度を取得
+                //old_position = marker.getPosition(); //変更前の緯度経度を取得
                 ball = marker;
-
                 if (marker.getTitle().equals("ボール")) {
                     Log.d("aaaa", marker.getId());
-                    Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                    //Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SwingActivity.class);
                     startActivityForResult(intent, 123);
                 } else if (marker.getTitle().equals("城")) {
-                    Toast.makeText(getApplicationContext(), "城をタップしました。", Toast.LENGTH_LONG).show();
+                    ball = marker;
+                    //Toast.makeText(getApplicationContext(), "城をタップしました。", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), CastleActivity.class);
+                    startActivityForResult(intent, 456);
                 }
                 return false;
             }
@@ -175,20 +212,53 @@ public class MapsActivity extends FragmentActivity  {
                                 .title("ボール")
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ball))
                                 .anchor(0.5f, 0.5f));*/
-                        ball_mLatitude = bundle.getDouble("key.latitude");
-                        ball_mLongitude = bundle.getDouble("key.longitude");
-                        LatLng new_position = new LatLng(ball_mLatitude, ball_mLongitude);
+                        //ball_mLatitude = bundle.getDouble("key.latitude");
+                        //ball_mLongitude = bundle.getDouble("key.longitude");
+                        double movementLatitude = bundle.getDouble("key.latitude");
+                        double movementLongitude = bundle.getDouble("key.longitude");
+                        LatLng new_position = new LatLng(ball.getPosition().latitude + movementLatitude, ball.getPosition().longitude + movementLongitude);
                         /* ここから */
-                        String sqlstl = "update ball set latitude = " + ball_mLatitude + ",longitude = " + ball_mLongitude
-                                + " where latitude =" + old_position.latitude + ";";
+                        //SQL文がうまく機能しているか確認
+                        //玉を移動させてアプリを起動しなおすと、初期位置に戻っていたため
+                        String sqlstl = "update ball set latitude = " + new_position.latitude + ",longitude = " + new_position.longitude
+                                + " where latitude =" + ball.getPosition().latitude + ";";
                         db.execSQL(sqlstl);
                         /* ここまで追加 */
                         //mMap.clear();
-                        ball.setPosition(new_position);
-                        mMap = null;
+
+                        if((ball_in_hall(hall_location, new_position)) == 1) {
+                            ball.remove();
+                            hall.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.castle));
+                            hall.setTitle("城");
+                        }
+                            ball.setPosition(new_position);
+
+
+                        //mMap = null;
+                    }
+                    break;
+
+                case 456:
+                    if (resultCode == RESULT_OK) {
+                        ball.remove();
                     }
                     break;
             }
+        }
+    }
+
+    private int ball_in_hall(LatLng hall, LatLng ball) {
+
+        double distance;
+
+        distance = Math.sqrt(Math.pow((ball.latitude - hall.latitude), 2) + Math.pow((ball.longitude - hall.longitude), 2));
+        distance *= 100;
+
+        Log.d("aaaaaaaaa", String.valueOf(distance));
+        if (distance <= 130) {
+            return 1;
+        } else {
+            return 0;
         }
     }
 

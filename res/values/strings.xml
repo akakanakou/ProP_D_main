@@ -4,4 +4,20 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_database_helper">DatabaseHelper</string>
     <string name="title_activity_ball_change">BallChangeActivity</string>
+    <string name="testBtn">発射</string>
+    <string name="remaining">8</string>
+    <string name="remaining7">7</string>
+    <string name="title_activity_intent">IntentActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_sub">SubActivity</string>
+    <string name="tap_message">ボタン1つで飛ばします</string>
+    <string name="rema_b8">8</string>
+    <string name="rema_b7">7</string>
+    <string name="title_activity_swing">SwingActivity</string>
+    <string name="btn_swing">スイング開始</string>
+    <string name="btn_swinging">スイング中</string>
+    <string name="title_activity_castle">CastleActivity</string>
+    <string name="title_activity_castle2">CastleActivity2</string>
 </resources>
